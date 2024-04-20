@@ -27,7 +27,7 @@ func backtrackNQueen(row int, count int) int {
 			placeQueen(row, col)
 			if row+1 == n {
 				count += 1 // solution only counts if there is one queen on each row
-				printCoords()
+				printCoords("Solution")
 			} else {
 				count = backtrackNQueen(row+1, count)
 			}
@@ -39,10 +39,18 @@ func backtrackNQueen(row int, count int) int {
 	return count
 }
 
-func printCoords() {
-	fmt.Println("Solution:")
-	for c := range placedSquares {
-		fmt.Printf("\t(x,y): %d,%d\n", c.x, c.y)
+func printCoords(title string) {
+	fmt.Printf("%s:\n", title)
+	for i := 0; i < n; i++ {
+		fmt.Printf("\t")
+		for j := 0; j < n; j++ {
+			if _, ok := placedSquares[coord{x: i, y: j}]; ok {
+				fmt.Printf("o")
+			} else {
+				fmt.Printf("-")
+			}
+		}
+		fmt.Println()
 	}
 }
 
