@@ -2,15 +2,22 @@ package main
 
 import (
 	"fmt"
+	"log"
 )
 
-var n = 4
+var n = 0
 
-func main() {
-	fmt.Printf("totalNQueens(%d) = %d\n", n, totalNQueens(n))
+func exitIfErr(err error) {
+	log.Fatal(err)
 }
 
-func totalNQueens(n int) int {
+func main() {
+	n = 5
+	fmt.Printf("totalNQueens(%d) = %d solutions\n", n, totalNQueens())
+	printSolutions("Solutions")
+}
+
+func totalNQueens() int {
 	return backtrackNQueen(0, 0)
 }
 
@@ -20,6 +27,7 @@ type coord struct {
 }
 
 var placedSquares = make(map[coord]interface{})
+var solutions = make([]map[coord]interface{}, 0)
 
 func backtrackNQueen(row int, count int) int {
 	for col := 0; col < n; col++ {
@@ -27,7 +35,8 @@ func backtrackNQueen(row int, count int) int {
 			placeQueen(row, col)
 			if row+1 == n {
 				count += 1 // solution only counts if there is one queen on each row
-				printCoords("Solution")
+				//		printCoords("Solution")
+				saveSolution()
 			} else {
 				count = backtrackNQueen(row+1, count)
 			}
@@ -37,6 +46,36 @@ func backtrackNQueen(row int, count int) int {
 	}
 
 	return count
+}
+
+func printSolutions(title string) {
+	fmt.Printf("%s:\n", title)
+	for row := 0; row < n; row++ {
+		for i, s := range solutions {
+			if i == 0 {
+				fmt.Printf("\t")
+			} else {
+				fmt.Printf("  ")
+			}
+
+			for col := 0; col < n; col++ {
+				if _, ok := s[coord{x: row, y: col}]; ok {
+					fmt.Printf("o")
+				} else {
+					fmt.Printf("-")
+				}
+			}
+		}
+		fmt.Println()
+	}
+}
+
+func saveSolution() {
+	solution := make(map[coord]interface{})
+	for k, v := range placedSquares {
+		solution[k] = v
+	}
+	solutions = append(solutions, solution)
 }
 
 func printCoords(title string) {
