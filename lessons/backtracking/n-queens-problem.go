@@ -8,13 +8,22 @@ import (
 var n = 0
 
 func exitIfErr(err error) {
-	log.Fatal(err)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func main() {
-	n = 5
-	fmt.Printf("totalNQueens(%d) = %d solutions\n", n, totalNQueens())
-	printSolutions("Solutions")
+
+	var i int
+	for {
+		_, err := fmt.Scanf("%d", &i)
+		exitIfErr(err)
+		n = i
+		fmt.Printf("totalNQueens(%d) = %d solutions\n", n, totalNQueens())
+		printSolutions("Solutions")
+		clearSolutions()
+	}
 }
 
 func totalNQueens() int {
@@ -46,6 +55,10 @@ func backtrackNQueen(row int, count int) int {
 	}
 
 	return count
+}
+
+func clearSolutions() {
+	solutions = make([]map[coord]interface{}, 0)
 }
 
 func printSolutions(title string) {
