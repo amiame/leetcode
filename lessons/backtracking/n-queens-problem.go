@@ -62,8 +62,9 @@ func isNotUnderAttack(x, y int) bool {
 
 		dx := c.x - x
 		dy := c.y - y
+		mmod := dx % dy
 		m := dx / dy
-		if m == 1 || m == -1 {
+		if mmod == 0 && (m == 1 || m == -1) {
 			return false
 		}
 	}
